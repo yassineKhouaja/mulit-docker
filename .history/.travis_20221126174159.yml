@@ -1,0 +1,14 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t yassinekhouaja/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run yassinekhouaja/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t yassinekhouaja/multi-client ./client
+  - docker build -t yassinekhouaja/multi-nginx ./nginx
+  - docker build -t yassinekhouaja/multi-server .server
+  - docker build -t yassinekhouaja/multi-client ./client
